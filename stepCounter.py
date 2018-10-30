@@ -30,28 +30,32 @@ def main():
 
 ##Calculate n for all steps
 def countPaths(n, posSteps):
-    count = [0] * (n+1)
+    count = [0] * n
 
-    ##initialize all steps as 0
-    for x in range(0, len(count)-1):
-        count[x] = 0
+    #aps = [[[]for x in range(0, n)] for y in range(0, n)]
+    aps = [[]] * n
+    print(aps)
 
-    ##increment steps by step % possible step
-    for x in range(1, posSteps[len(posSteps)-1] + 1):
-        for y in range(0, len(posSteps)):
-            if ((x % posSteps[y]) == 0):
-                count[x-1] += 1
+    ##initialize possible steps as 1
+    for elem in posSteps:
+        count[elem-1] = 1
+        aps[elem-1].append(elem)
+    print(aps)
                 
-    ##add up initial steps to calculate later steps
-    #for x in range(posSteps[len(posSteps)-1], n):
+    ##add up steps to calculate later steps
     for x in range(0, n):
         for y in range(0, len(posSteps)):
-            print(count[x], "+", count[x-(posSteps[y])])
-            count[x] += count[x-(posSteps[y])]
-
+            ##Do not add steps that do not exist (step 1 + step-4)
+            if(((x+1)-posSteps[y]) > 0):
+                count[x] += count[x-(posSteps[y])]
+                aps[x-posSteps[y]].append(posSteps[y])
+                aps[x].append(aps[x-posSteps[y]])
+        print(x+1, ": ", aps[x])
+                
     ##print n for all steps
-    for x in range(0, len(count)-1):
-        print("stair",  x+1, " = " count[x])
+    ##for x in range(0, len(count)):
+        #print("stair",  x+1, " = ", count[x])
+    
 
     ##prints only the given step
     #return count[n]
